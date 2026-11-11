@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+
+# Ultralytics
+.ultralytics_cfg/
+runs/
+*.cache
+
+# Data and model weights
+smoke_data/
+data/
+weights/*.pt
+*.pt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store

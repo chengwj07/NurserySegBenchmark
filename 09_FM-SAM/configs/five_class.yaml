@@ -1,0 +1,35 @@
+# ============================================================
+# YOLO26 + SAM2 five categories of seedling semantic segmentation configuration files
+# Use the same five-category data set (seg_exp/data/) as 01~08, and the train/val division remains unchanged.
+# Category: 0=background, 1=Podocarpus macrophyllus, 2=Camellia sasanqua, 3=Loropetalum chinense, 4=Ligustrum quihoui (mask pixel value)
+# ============================================================
+
+# ---- Data path ----
+data:
+  data_root: "../data"                  # Five types of shared data (relative to project root or absolute path)
+  ann_dir: "ann_dir"            # Annotation directory (mask PNG, pixel value 0..4 category index)
+  img_dir: "img_dir"            # Image directory (original PNG, relative to data_root)
+  num_classes: 4                # Number of foreground categories (excluding background; total categories = num_classes + 1)
+  class_names: ["Podocarpus macrophyllus", "Camellia sasanqua", "Loropetalum chinense", "Ligustrum quihoui"]  # Corresponding mask pixels 1..4
+
+# ----YOLO26 detection fine-tuning (4 types of foreground detection, background=no frame)----
+yolo:
+  model: "yolo26x.pt"           # Pre-trained weights; when unable to connect to the Internet, change to yolo26n.yaml built from scratch
+  epochs: 100
+  imgsz: 1024
+  batch: 1
+  device: "0"                  # "cpu" or "0" (GPU)
+  project: "runs"
+  name: "five_class_train"
+  patience: 20                  # Early stopping rounds
+
+# ---- SAM2 segmentation (category-independent, only the boundary is picked; the category is determined by the YOLO detection frame) ----
+sam:
+  model: "weights/sam2_l.pt"    # SAM2 weight path
+  multimask_output: false        # Whether to return multiple candidate masks
+
+# ---- Assessment ----
+eval:
+  conf_threshold: 0.25          # YOLO detection confidence threshold
+  iou_threshold: 0.45            # YOLO NMS IoU threshold
+  max_det: 300                   # Maximum number of detection frames per image

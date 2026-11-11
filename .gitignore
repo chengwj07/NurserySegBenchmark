@@ -1,0 +1,68 @@
+# Python caches and build artifacts
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.dll
+*.egg-info/
+*.egg
+*.whl
+.eggs/
+build/
+dist/
+
+# Local environments and editor settings
+.venv/
+venv/
+.conda/
+.env
+.env.*
+!.env.example
+!.env.sample
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Test, lint and notebook caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.coverage
+.coverage.*
+htmlcov/
+node_modules/
+
+# Training outputs and logs
+work_dirs/
+runs/
+output/
+outputs/
+predictions/
+logs/
+sam3_logs/
+tensorboard/
+wandb/
+*.log
+*.cache
+.ultralytics_cfg/
+
+# Model checkpoints
+weights/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Local experiment datasets
+/data/
+/raw_dataset/
+/sam3_data/
+/09_FM-SAM/data/
+/09_FM-SAM/smoke_data/
+/10_SAM3/data/
+/10_SAM3/data_semantic/

@@ -1,0 +1,35 @@
+# ============================================================
+# Grounding DINO LoRA fine-tuning dependency (11_Grounded-SAM2)
+# The version is consistent with the verified miaomu environment (Python 3.10)
+#
+# Installation steps (note the order):
+# 1) The CUDA version of torch needs to be installed from the official PyTorch source:
+#        pip install torch==2.8.0+cu128 torchvision==0.23.0+cu128 \
+#            --index-url https://download.pytorch.org/whl/cu128
+# 2) Install other dependencies:
+#        pip install -r requirements.txt
+# 3) Compile GroundingDINO’s Deformable Attention CUDA operator (required, otherwise the model cannot forward):
+#        cd GroundingDINO && pip install -e .
+# 4) Download pre-trained weights (SwinT):
+#        wget https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha/groundingdino_swint_ogc.pth
+#
+# Note: huggingface.co is blocked on this machine. To download bert-base-uncased, you need to add a mirror:
+#       export HF_ENDPOINT=https://hf-mirror.com
+# ============================================================
+
+
+
+# --- GroundingDINO official dependency ---
+transformers==5.17.0   # Requires the transformers 5.x patch of bertwarper.py (this repository has been installed)
+addict==2.4.0          # SLConfig configuration analysis
+timm==0.4.12           # Swin trunk
+numpy==2.2.6
+opencv-python==5.0.0.93  # mask -> bbox of prepare_dataset.py
+pycocotools==2.0.11    # Required when importing the groundingdino package
+yapf==0.43.0           # The official requirements come with it and are not required for operation.
+# supervision>=0.22.0 # There are official requirements, but the fine-tuning/inference pipeline is not used. Install as needed.
+
+# --- Fine-tune script additional dependencies ---
+peft==0.20.0           # LoRA injection (lora_finetune_grounding_dino.py)
+scipy==1.15.3          # Hungarian matching (grounding_dino_criterion.py)
+Pillow==12.3.0         # Data set reading (FineGrainedSpeciesDataset)

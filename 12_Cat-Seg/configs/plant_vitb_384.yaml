@@ -1,0 +1,76 @@
+# Four categories of seedling semantic segmentation fine-tuning configuration (CAT-Seg ViT-B/16, 5 categories = background+Podocarpus macrophyllus+Camellia sasanqua+Loropetalum chinense+Ligustrum quihoui)
+# Modified based on official configs/vitb_384.yaml. CLIP input resolution is fixed 384x384 (ViT-B/16).
+# Data preparation: see 12_Cat-Seg/miaomu/README.md; training command:
+#   sh miaomu/train.sh configs/plant_vitb_384.yaml 1 output/plant
+_BASE_: config.yaml
+MODEL:
+  META_ARCHITECTURE: "CATSeg"
+  PIXEL_MEAN: [123.675, 116.280, 103.530]
+  PIXEL_STD: [58.395, 57.120, 57.375]
+  WEIGHTS: "weights/model_base.pth"   # CAT-Seg-B pre-training weights on COCO-Stuff, starting point for fine-tuning
+  SEM_SEG_HEAD:
+    NAME: "CATSegHead"
+    IN_FEATURES: ["res2", "res3", "res4"]
+    IGNORE_VALUE: 255
+    NUM_CLASSES: 5                     # 0=background,1=Podocarpus macrophyllus,2=Camellia sasanqua,3=Loropetalum chinense,4=Ligustrum quihoui
+    TRAIN_CLASS_JSON: "datasets/plant.json"
+    TEST_CLASS_JSON: "datasets/plant.json"
+    CLIP_PRETRAINED: "ViT-B/16"
+    PROMPT_DEPTH: 0
+    PROMPT_LENGTH: 0
+    TEXT_GUIDANCE_DIM: 512
+    TEXT_GUIDANCE_PROJ_DIM: 128
+    APPEARANCE_GUIDANCE_DIM: 512
+    APPEARANCE_GUIDANCE_PROJ_DIM: 128
+    DECODER_DIMS: [64, 32]
+    DECODER_GUIDANCE_DIMS: [256, 128]
+    DECODER_GUIDANCE_PROJ_DIMS: [32, 16]
+    NUM_LAYERS: 2
+    NUM_HEADS: 4
+    HIDDEN_DIMS: 128
+    POOLING_SIZES: [2, 2]
+    FEATURE_RESOLUTION: [24, 24]
+    WINDOW_SIZES: 12
+    ATTENTION_TYPE: "linear"
+    CLIP_FINETUNE: "attention"         # Only fine-tuning the Q/V projection + position encoding of CLIP attention, official default
+  PROMPT_ENSEMBLE_TYPE: "single"
+DATASETS:
+  TRAIN: ("plant_train_sem_seg",)
+  TEST: ("plant_val_sem_seg",)
+SOLVER:
+  IMS_PER_BATCH: 4
+  LR_SCHEDULER_NAME: "WarmupCosineLR"
+  BASE_LR: 0.0002
+  MAX_ITER: 30000
+  WARMUP_FACTOR: 1.0
+  WARMUP_ITERS: 500
+  WEIGHT_DECAY: 0.0001
+  BACKBONE_MULTIPLIER: 0.0
+  CLIP_MULTIPLIER: 0.01
+  CLIP_GRADIENTS:
+    ENABLED: True
+    CLIP_TYPE: "full_model"
+    CLIP_VALUE: 0.01
+    NORM_TYPE: 2.0
+INPUT:
+  MIN_SIZE_TRAIN: (384,)
+  MIN_SIZE_TRAIN_SAMPLING: "choice"
+  MIN_SIZE_TEST: 640
+  MAX_SIZE_TEST: 2560
+  CROP:
+    ENABLED: True
+    TYPE: "absolute"
+    SIZE: (384, 384)
+    SINGLE_CATEGORY_MAX_AREA: 1.0
+  COLOR_AUG_SSD: True
+  SIZE_DIVISIBILITY: 384
+  FORMAT: "RGB"
+  DATASET_MAPPER_NAME: "mask_former_semantic"
+TEST:
+  EVAL_PERIOD: 1000
+  SLIDING_WINDOW: False
+DATALOADER:
+  FILTER_EMPTY_ANNOTATIONS: True
+  NUM_WORKERS: 4
+VERSION: 2
+CUDNN_BENCHMARK: True
