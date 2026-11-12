@@ -2,7 +2,7 @@
 
 [English](README.md) · [简体中文](README_zh-CN.md)
 
-本仓库收录论文 *From UAV Imagery to Nursery Stock Value with Vision Foundation Models and an LLM Agent* 中基于无人机影像的苗木分割实验。实验比较不同语义分割模型识别影像中四类苗木及背景的表现。分割结果为论文所述的后续价值评估流程提供支持。
+本仓库收录论文 *From UAV Imagery to Asset Value with Vision Foundation Models and an LLM Agent* 中基于无人机影像的苗木分割实验。实验比较不同语义分割模型识别影像中四类苗木及背景的表现。分割结果为论文所述的后续价值评估流程提供支持。
 
 ## 目录结构
 

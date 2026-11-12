@@ -2,7 +2,7 @@
 
 [English](README.md) · [简体中文](README_zh-CN.md)
 
-This repository contains the UAV nursery stock segmentation experiments for *From UAV Imagery to Nursery Stock Value with Vision Foundation Models and an LLM Agent*. The experiments compare semantic segmentation models for identifying four nursery stock categories and background in UAV imagery. The segmentation results support the downstream valuation workflow described in the paper.
+This repository contains the UAV nursery stock segmentation experiments for *From UAV Imagery to Asset Value with Vision Foundation Models and an LLM Agent*. The experiments compare semantic segmentation models for identifying four nursery stock categories and background in UAV imagery. The segmentation results support the downstream valuation workflow described in the paper.
 
 ## Repository structure
 
